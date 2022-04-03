@@ -20,6 +20,8 @@ WiFiClient wifiClient;
 
   void MQTT::setup() {
     this->client.setServer(MQTT_HOST, MQTT_PORT);
+    this->client.setSocketTimeout(2);
+    this->client.setKeepAlive(2);
     this->client.setCallback([this](char * topic, unsigned char* payload, unsigned int length){
       Serial.println("-------new message from broker-----");
       Serial.print("channel:");
@@ -32,8 +34,11 @@ WiFiClient wifiClient;
   }
 
   void MQTT::loop() {
-    this->ensureConnected();
-    client.loop();
+    if (::WiFi.status() == WL_CONNECTED) {
+      this->ensureConnected();
+      client.loop();
+      Serial.println("Mqtt loop finished");
+    }
   }
 
   void MQTT::writeToTopic(char * topic, char * payload) {
@@ -51,6 +56,10 @@ WiFiClient wifiClient;
         // Attempt to connect
         String clientId = "ESP32Client-";
         clientId += String(random(0xffff), HEX);
+        Serial.print("User:");
+        Serial.print(MQTT_USER);
+        Serial.print("Password:");
+        Serial.print(MQTT_PASS);
         if (client.connect(clientId.c_str(), MQTT_USER, MQTT_PASS)) {
             Serial.println("connected");
             subscribeToTopics();
