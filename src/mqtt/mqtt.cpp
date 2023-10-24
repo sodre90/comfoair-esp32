@@ -43,7 +43,7 @@ WiFiClient wifiClient;
 
   void MQTT::writeToTopic(char * topic, char * payload) {
     this->ensureConnected();
-    this->client.publish(topic, payload);
+    this->client.publish(topic, payload, true);
   }
 
 // PRIVATE STUFF

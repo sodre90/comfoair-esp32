@@ -230,7 +230,7 @@ void loop() {
       Serial.print(decodedMessage.val);
       sprintf(mqttTopicMsgBuf, "%s/%s", MQTT_PREFIX, decodedMessage.name);
       sprintf(mqttTopicValBuf, "%s", decodedMessage.val);
-      mqttClient.publish(mqttTopicMsgBuf, 0, false, mqttTopicValBuf);
+      mqttClient.publish(mqttTopicMsgBuf, 0, true, mqttTopicValBuf);
     }
   }
 }
