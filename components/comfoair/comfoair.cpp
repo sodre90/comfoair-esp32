@@ -104,6 +104,7 @@ void Comfoair::loop(){
     // ESP_LOGD(TAG, "loop");
     if (CAN0.read(canMessage)) {
         uint16_t PDOID = (canMessage.id & 0x01fff000) >> 14;
+        ESP_LOGI(TAG, "PDOID: %hu", PDOID);
         uint8_t *vals = &canMessage.data.uint8[0];
         if (sensors.find(PDOID) != sensors.end()) {
             ComfoSensor<sensor::Sensor, int> el = sensors.find(PDOID)->second;
